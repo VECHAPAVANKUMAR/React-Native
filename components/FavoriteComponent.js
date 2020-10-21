@@ -58,7 +58,7 @@ class Favorites extends Component {
                 }
             ];
             return (
-                // <Swipeout right={rightButton} autoClose>
+                // {/* <Swipeout right={rightButton} autoClose> */}
                     <ListItem
                         key={index}
                         title={item.name}
@@ -67,7 +67,7 @@ class Favorites extends Component {
                         onPress={() => navigate('Dishdetail', { dishId: item.id })}
                         leftAvatar={{ source: {uri: baseUrl + item.image}}}
                         />
-                // </Swipeout>
+                // {/* </Swipeout> */}
             );
         };
 
