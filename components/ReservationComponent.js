@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Alert } from 'react-native';
+import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Alert } from 'react-native';
 import DatePicker from 'react-native-datepicker'
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions';
@@ -11,7 +11,6 @@ class Reservation extends Component {
         guests: 1,
         smoking: false,
         date: '',
-        showModal: false,
     }
 
     static navigationOptions = {
@@ -20,7 +19,6 @@ class Reservation extends Component {
 
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
-        alert(permission.status);
         if (permission.status !== 'granted') {
             permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
             if (permission.status !== 'granted') {
@@ -44,10 +42,6 @@ class Reservation extends Component {
                 color: '#512DA8'
             }
         });
-    }
-
-    toggleModal() {
-        this.setState({showModal: !this.state.showModal});
     }
 
     handleReservation() {
@@ -76,7 +70,6 @@ class Reservation extends Component {
             ],
             { cancelable : false }
         );
-        this.toggleModal();
     }
 
     resetForm() {
@@ -84,7 +77,6 @@ class Reservation extends Component {
             guests: 1,
             smoking: false,
             date: '',
-            showModal: false
         });
     }
     
@@ -142,35 +134,18 @@ class Reservation extends Component {
                     />
                     </View>
                     <View style={styles.formRow}>
-                    <Button
-                        onPress={() => this.handleReservation()}
-                        title="Reserve"
-                        color="#512DA8"
-                        accessibilityLabel="Learn more about this purple button"
-                    />
+                        <Button
+                            onPress={() => this.handleReservation()}
+                            title="Reserve"
+                            color="#512DA8"
+                            accessibilityLabel="Learn more about this purple button"
+                        />
                     </View>
-                    <Modal animationType = "slide" transparent = {true}
-                        visible = {this.state.showModal}
-                        onDismiss = {() => this.toggleModal() }
-                        onRequestClose = {() => this.toggleModal() }>
-                        <View style = {styles.modal}>
-                            <Text style = {styles.modalTitle}>Your Reservation</Text>
-                            <Text style = {styles.modalText}>Number of Guests: {this.state.guests}</Text>
-                            <Text style = {styles.modalText}>Smoking?: {this.state.smoking ? 'Yes' : 'No'}</Text>
-                            <Text style = {styles.modalText}>Date and Time: {this.state.date}</Text>
-                            <Button 
-                                onPress = {() =>{this.toggleModal(); this.resetForm();}}
-                                color="#512DA8"
-                                title="Close" 
-                            />
-                        </View>
-                    </Modal>
                 </ScrollView>
             </Animatable.View>
         );
     }
-
-};
+}
 
 const styles = StyleSheet.create({
     formRow: {
@@ -187,22 +162,6 @@ const styles = StyleSheet.create({
     formItem: {
         flex: 1
     },
-    modal: {
-        justifyContent: 'center',
-        margin: 20
-    },
-    modalTitle: {
-         fontSize: 24,
-         fontWeight: 'bold',
-         backgroundColor: '#512DA8',
-         textAlign: 'center',
-         color: 'white',
-         marginBottom: 20
-    },
-    modalText: {
-         fontSize: 18,
-         margin: 10
-    } 
 });
 
 export default Reservation;
