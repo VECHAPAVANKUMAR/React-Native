@@ -3,18 +3,15 @@ import { Text, View, ScrollView, StyleSheet, Picker, Switch, Button, Modal, Aler
 import DatePicker from 'react-native-datepicker'
 import * as Animatable from 'react-native-animatable';
 import * as Permissions from 'expo-permissions';
+import * as Notifications from 'expo-notifications';
 
 class Reservation extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            guests: 1,
-            smoking: false,
-            date: '',
-            showModal: false,
-        }
+    state = {
+        guests: 1,
+        smoking: false,
+        date: '',
+        showModal: false,
     }
 
     static navigationOptions = {
@@ -23,6 +20,7 @@ class Reservation extends Component {
 
     async obtainNotificationPermission() {
         let permission = await Permissions.getAsync(Permissions.USER_FACING_NOTIFICATIONS);
+        alert(permission.status);
         if (permission.status !== 'granted') {
             permission = await Permissions.askAsync(Permissions.USER_FACING_NOTIFICATIONS);
             if (permission.status !== 'granted') {
@@ -78,7 +76,7 @@ class Reservation extends Component {
             ],
             { cancelable : false }
         );
-        // this.toggleModal();
+        this.toggleModal();
     }
 
     resetForm() {
@@ -120,12 +118,12 @@ class Reservation extends Component {
                     <View style={styles.formRow}>
                     <Text style={styles.formLabel}>Date and Time</Text>
                     <DatePicker
-                        style={{flex: 2, marginRight: 20}}
+                        style={{width: 200, flex : 2, marginRight : 20}}
                         date={this.state.date}
-                        format=''
-                        mode="datetime"
-                        placeholder="select date and Time"
-                        minDate="2017-01-01"
+                        mode="date"
+                        placeholder="select date"
+                        format="YYYY-MM-DD"
+                        minDate="2020-10-21"
                         confirmBtnText="Confirm"
                         cancelBtnText="Cancel"
                         customStyles={{
@@ -138,7 +136,7 @@ class Reservation extends Component {
                         dateInput: {
                             marginLeft: 36
                         }
-                        // ... You can check the source to find the other keys. 
+                        // ... You can check the source to find the other keys.
                         }}
                         onDateChange={(date) => {this.setState({date: date})}}
                     />

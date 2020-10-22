@@ -31,7 +31,7 @@ class AboutUs extends Component {
     }
 
     render() {
-        const { params } = this.props.navigation.state;
+        const { navigate } = this.props.navigation;
         const renderLeader = ({item, index}) => {
             // heideCheveron by defaukt when displaying list items it will keep a arrow at the start of each item
             // index is the value that we passed to key extractor in flatlist that means index is item id
@@ -51,7 +51,7 @@ class AboutUs extends Component {
                 />
             );
         }
-        
+
         if (this.props.leaders.isLoading) {
             return (
                 <ScrollView>

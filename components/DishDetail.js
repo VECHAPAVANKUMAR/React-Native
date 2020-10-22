@@ -1,10 +1,11 @@
-import React, { Component, useState } from 'react';
-import { Text, View, ScrollView, FlatList, Modal, Button, TouchableHighlight } from 'react-native';
-import { Card, Icon, Rating, Input, AirbnbRating  } from 'react-native-elements';
+import React, { Component, } from 'react';
+import { Text, View, ScrollView, FlatList, Button, Share } from 'react-native';
+import { Card, Icon, Rating, AirbnbRating, Input, } from 'react-native-elements';
 import * as Animatable from 'react-native-animatable';
 import { connect } from 'react-redux';
 import { baseUrl } from '../shared/baseUrl';
 import { postFavorite } from '../redux/ActionCreator';
+import Modal from 'react-native-modal';
 
 const mapStateToProps = state => {
     return {
@@ -17,6 +18,17 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     postFavorite: (dishId) => dispatch(postFavorite(dishId))
 })
+
+const shareDish = (title, message, url) => {
+    Share.share({
+        title: title,
+        message: title + ': ' + message + ' ' + url,
+        url: url
+    },{
+        dialogTitle: 'Share ' + title
+    })  
+    .catch(err => alert("Not Supported"))        
+}
 
 class RenderDish extends Component {
 
@@ -88,14 +100,32 @@ class RenderDish extends Component {
                                 color='#0000FF'
                                 onPress={() => this.toggleModal()}
                             />
+                            <Icon
+                                raised
+                                reverse
+                                name='share'
+                                type='font-awesome'
+                                color='#51D2A8'
+                                style={{flex:1}}
+                                onPress={() => shareDish(dish.name, dish.description, baseUrl + dish.image)}
+                            />
                         </View>
                             <Modal 
-                                animationType = "slide" 
-                                transparent = {false}
+                                // animationType = "slide" 
+                                // transparent = {false}
                                 visible = {this.state.showModal}
                                 onDismiss = {() => this.toggleModal() }
                                 onRequestClose = {() => this.toggleModal() }>
                             <View>
+                                {/* <Rating 
+                                    showRating
+                                    type="star"
+                                    fractions={0}
+                                    startingValue={this.state.rating}
+                                    imageSize={40}
+                                    onFinishRating={(rating) => this.setState({rating})}
+                                    style={{ paddingVertical : 10 }}
+                                /> */}
                                 <AirbnbRating
                                     count={5}
                                     reviews={["Rating : 1/5", "Rating : 2/5", "Rating : 3/5", "Rating : 4/5", "Rating : 5/5"]}
@@ -146,7 +176,7 @@ function RenderComments(props) {
         return (
             <View key={index} style={{margin: 10}}>
                 <Text style={{fontSize: 14}}>{item.comment}</Text>
-                <Text style={{alignItems:'flex-start'}}>
+                <Text >
                     <Rating showRating reviews={[]} imageSize={20} startingValue={item.rating} />
                 </Text>
                 {/* <Text style={{fontSize: 12}}>{item.rating} Stars</Text> */}
