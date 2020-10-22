@@ -48,11 +48,11 @@ class LoginTab extends Component {
     };
 
     handleLogin() {
+
         if (this.state.remember) {
             SecureStore.setItemAsync('userinfo', JSON.stringify({username: this.state.username, password: this.state.password}))
             .catch((error) => console.log('Could not save user info', error));
-        }
-        else {
+        } else {
             SecureStore.deleteItemAsync('userinfo')
             .catch((error) => console.log('Could not delete user info', error));
         }
@@ -123,36 +123,36 @@ class LoginTab extends Component {
 
 class RegisterTab extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            username: '',
-            password: '',
-            firstname: '',
-            lastname: '',
-            email: '',
-            remember: false,
-            imageUrl: baseUrl + 'images/logo.png'
-        }
+    state = {
+        username: '',
+        password: '',
+        firstname: '',
+        lastname: '',
+        email: '',
+        remember: false,
+        imageUrl: baseUrl + 'images/logo.png'
     }
 
     getImageFromCamera = async () => {
+
         const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
         const cameraRollPermission = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+
         if (cameraPermission.status === 'granted' && cameraRollPermission.status === 'granted') {
+
             let capturedImage = await ImagePicker.launchCameraAsync({
                 allowsEditing: true,
                 aspect: [4, 3],
             });
+
             if (!capturedImage.cancelled) {
                 this.processImage(capturedImage.uri);
             }
         }
-
     }
 
     processImage = async (imageUri) => {
+
         let processedImage = await ImageManipulator.manipulate(
             imageUri, 
             [
@@ -161,7 +161,6 @@ class RegisterTab extends Component {
             {format: 'png'}
         );
         this.setState({imageUrl: processedImage.uri });
-
     }
 
     static navigationOptions = {
